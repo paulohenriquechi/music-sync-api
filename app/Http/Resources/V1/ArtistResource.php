@@ -20,6 +20,8 @@ class ArtistResource extends JsonResource
             'description' => $this->description,
             'country' => $this->country,
             'formation_year' => $this->formation_year,
+            'albums' => $this->albums,
+            'songs' => $this->songs
         ];
     }
 }

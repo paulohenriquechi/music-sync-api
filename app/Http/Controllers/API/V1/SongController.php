@@ -3,19 +3,18 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\ArtistResource;
-use App\Models\Artist;
+use App\Http\Resources\V1\SongResource;
+use App\Models\Song;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
-class ArtistController extends Controller
+class SongController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return ArtistResource::collection(Artist::with('albums', 'songs')->get());
+        return Song::with('album')->get();
     }
 
     /**
@@ -23,22 +22,15 @@ class ArtistController extends Controller
      */
     public function store(Request $request)
     {
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'description' => 'required',
-            'country' => 'required',
-            'year' => 'required',
-        ]);
-
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Artist $artist)
+    public function show(Song $song)
     {
-        return new ArtistResource($artist);
+        return new SongResource(Song::with('album')->find($song));
     }
 
     /**

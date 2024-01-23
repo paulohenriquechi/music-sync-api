@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\V1\AlbumController;
 use App\Http\Controllers\API\V1\ArtistController;
+use App\Http\Controllers\API\V1\SongController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function() {
     Route::apiResource('/artists', ArtistController::class);
+    Route::apiResource('/albums', AlbumController::class);
+    Route::apiResource('/songs', SongController::class);
 });
 
