@@ -21,7 +21,7 @@ class ArtistResource extends JsonResource
             'country' => $this->country,
             'formation_year' => $this->formation_year,
             'albums' => $this->albums,
-            'songs' => $this->songs
+            'songs' => $this->songs->makeHidden('laravel_through_key')
         ];
     }
 }
