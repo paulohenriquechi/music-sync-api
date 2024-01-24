@@ -5,11 +5,14 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ArtistResource;
 use App\Models\Artist;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ArtistController extends Controller
 {
+    use HttpResponses;
+
     /**
      * Display a listing of the resource.
      */
@@ -23,14 +26,22 @@ class ArtistController extends Controller
      */
     public function store(Request $request)
     {
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
+        $validated = Validator::make($request->all(), [
+            'name' => 'required|max:128',
             'description' => 'required',
-            'country' => 'required',
-            'year' => 'required',
+            'country' => 'required|max:128',
+            'formation_year' => 'required|max:4',
         ]);
 
+        if ($validated->fails())
+            return $this->error('Validation failed', 422, $validated->errors());
+
+        $artist = Artist::create($validated->validated());
+
+        if ($artist)
+            return $this->success('Artist created successfully', 200, $artist);
+
+        return $this->error('Artist not created', 400);
     }
 
     /**

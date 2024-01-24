@@ -29,7 +29,7 @@ class AlbumController extends Controller
      */
     public function show(Album $album)
     {
-        return Album::find($album);
+        return Album::with('songs')->find($album);
     }
 
     /**
