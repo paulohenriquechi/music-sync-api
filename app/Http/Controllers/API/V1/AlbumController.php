@@ -14,11 +14,19 @@ class AlbumController extends Controller
     use HttpResponses;
 
     /**
+     * Protect the methods for autenticated users only.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
+
+    /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return AlbumResource::collection(Album::all());
+        return AlbumResource::collection(Album::paginate());
     }
 
     /**
