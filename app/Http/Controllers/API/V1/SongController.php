@@ -14,7 +14,7 @@ class SongController extends Controller
      */
     public function index()
     {
-        return Song::with('album')->get();
+        return SongResource::collection(Song::all());
     }
 
     /**
@@ -30,7 +30,7 @@ class SongController extends Controller
      */
     public function show(Song $song)
     {
-        return new SongResource(Song::with('album')->find($song));
+        return new SongResource($song);
     }
 
     /**

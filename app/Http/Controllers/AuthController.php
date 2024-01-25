@@ -21,30 +21,31 @@ class AuthController extends Controller
         ]);
 
         if ($validated->fails())
-            return $this->error('Validation failed', 422, $validated->errors());
+            return $this->error($validated->errors(), 'Validation failed', 422);
 
         $user = User::create($validated->validated());
 
         if ($user)
-            return $this->success('User created successfully', 200);
+            return $this->success(null, 'User created successfully');
 
-        return $this->error('User not created', 400);
+        return $this->error(null, 'User not created');
     }
-    
+
     public function signin(Request $request)
     {
         if (Auth::attempt($request->only('email', 'password'))) {
-            return $this->success('Authorized', 200, [
+            return $this->success([
                 'token' => $request->user()->createToken('token')->plainTextToken
-            ]);
+            ], 'Authorized');
         }
 
-        return $this->error('Unauthorized', 403);
+        return $this->error(null, 'Unauthorized', 403);
     }
 
     public function logout(Request $request)
     {
+        $request->user()->currentAccessToken()->delete();
 
+        return $this->success(null, 'Token revoked');
     }
-
 }

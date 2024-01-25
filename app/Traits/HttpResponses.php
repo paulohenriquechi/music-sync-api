@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 trait HttpResponses
 {
-    public function success(string $message, string|int $status, array|Model|JsonResource $data = [])
+    public function success(array|null|Model|JsonResource $data = [], string $message = 'Data returned successfully', string|int $status = 200)
     {
         return response()->json([
             'message' => $message,
@@ -17,13 +17,12 @@ trait HttpResponses
         ], $status);
     }
 
-    public function error(string $message, string|int $status, array|MessageBag $errors = [], array $data = [])
+    public function error(array|null|MessageBag $errors = [], string $message = 'Something went wrong', string|int $status = 400)
     {
         return response()->json([
             'message' => $message,
             'success' => false,
             'errors' => $errors,
-            'data' => $data
         ], $status);
     }
 }

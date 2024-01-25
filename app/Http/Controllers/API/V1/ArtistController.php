@@ -26,7 +26,7 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        return ArtistResource::collection(Artist::with('albums', 'songs')->get());
+        return ArtistResource::collection(Artist::all());
     }
 
     /**
@@ -42,14 +42,14 @@ class ArtistController extends Controller
         ]);
 
         if ($validated->fails())
-            return $this->error('Validation failed', 422, $validated->errors());
+            return $this->error($validated->errors(), 'Validation failed', 422);
 
         $artist = Artist::create($validated->validated());
 
         if ($artist)
-            return $this->success('Artist created successfully', 200, new ArtistResource($artist));
+            return $this->success($artist, 'Artist created successfully');
 
-        return $this->error('Artist not created', 400);
+        return $this->error(null, 'Artist not created');
     }
 
     /**
@@ -60,9 +60,9 @@ class ArtistController extends Controller
         $artist = Artist::find($id);
 
         if (empty($artist))
-            return $this->error('Artist not found', 404);
+            return $this->error(null, 'Artist not found', 404);
 
-        return $this->success('Data returned successfully', 200, new ArtistResource($artist));
+        return $this->success(new ArtistResource($artist));
     }
 
     /**
@@ -73,7 +73,7 @@ class ArtistController extends Controller
         $artist = Artist::find($id);
 
         if (empty($artist))
-            return $this->error('Artist not found', 404);
+            return $this->error(null, 'Artist not found', 404);
 
         $validated = Validator::make($request->all(), [
             'name' => 'nullable|string|max:128',
@@ -83,12 +83,12 @@ class ArtistController extends Controller
         ]);
 
         if ($validated->fails())
-            return $this->error('Validation failed', 422, $validated->errors());
+            return $this->error($validated->errors(), 'Validation failed', 422);
 
         $artist->fill($validated->validated());
         $artist->save();
 
-        return $this->success('Artist updated successfully', 200, $artist);
+        return $this->success($artist, 'Artist updated successfully');
     }
 
     /**
@@ -99,8 +99,8 @@ class ArtistController extends Controller
         $deleted = $artist->delete();
 
         if ($deleted)
-            return $this->success('Artist deleted successfully', 200);
+            return $this->success(null, 'Artist deleted successfully');
 
-        return $this->error('Artist not deleted', 400);
+        return $this->error(null, 'Artist not deleted');
     }
 }
